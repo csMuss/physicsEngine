@@ -21,7 +21,7 @@ class DemoSquare extends JPanel implements KeyListener {
     
     private double time = 0; // Time variable
     private double horizontalSpeed = 100; // Example horizontal speed
-    double horizontalSpeedBounce = horizontalSpeed;
+    private double horizontalSpeedBounce = horizontalSpeed;
     
     Color amber = new Color(255, 191, 0);
     
@@ -41,6 +41,22 @@ class DemoSquare extends JPanel implements KeyListener {
         // Check if the pressed key is 'R'
         if (e.getKeyChar() == 'r' || e.getKeyChar() == 'R') {
             resetSimulation();
+        }
+        // Stops the timer
+        if (e.getKeyChar() == 'q' || e.getKeyChar() == 'Q') {
+            timer.stop();
+        }
+        // Resumes the timer
+        if (e.getKeyChar() == 'e' || e.getKeyChar() == 'e') {
+            timer.start();
+        }
+        // Makes speed faster by 10
+        if (e.getKeyChar() == 'n' || e.getKeyChar() == 'N') {
+        	horizontalSpeed += 10;
+        }
+        // Makes speed slower by 10
+        if (e.getKeyChar() == 'm' || e.getKeyChar() == 'M') {
+        	horizontalSpeed -= 10;
         }
     }
 
@@ -67,7 +83,7 @@ class DemoSquare extends JPanel implements KeyListener {
         g2.setColor(amber);
         
         // Calculate the new positions
-        double x = calculateXFalling(0, GRAVITY, time, horizontalSpeed);
+        double x = calculateXFalling(0, time, horizontalSpeed);
         double y = calculateYFalling(30, GRAVITY, time);
         // Get the size of the panel
         int panelWidth = getWidth();
@@ -77,9 +93,6 @@ class DemoSquare extends JPanel implements KeyListener {
        
         boolean flipHorizontalLeft = false;
         boolean flipHorizontalRight = false;
-     
-        // Draw text
-        drawInfoText(g, x, y);
 
         // Check if the cube is beyond the right boundary, bounce back
         if (x + cubeSize > panelWidth) {
@@ -95,17 +108,18 @@ class DemoSquare extends JPanel implements KeyListener {
 
         // Check if the cube is beyond the bottom boundary
         if (y + cubeSize > panelHeight) {
-            y = panelHeight - cubeSize;
-            // Stops when its out of bounds
-            timer.stop();            
+            y = panelHeight - cubeSize;     
+            timer.stop();
         }
         
         // Bounce off of the left side of the bounds
         if(flipHorizontalLeft == true) {
         	if(horizontalSpeedBounce >= 1) {
-        		horizontalSpeedBounce--;
+        		// number divided by slows down the bounce dividing by double the horizontal speed
+        		// gives you a rebound speed close to the inital horizontal speed
+        		horizontalSpeedBounce = horizontalSpeedBounce - horizontalSpeedBounce / (2 * horizontalSpeedBounce);
         	}
-        	x = calculateXFalling(0, GRAVITY, time, horizontalSpeedBounce);
+        	x = calculateXFalling(0, time, horizontalSpeedBounce);
         }
         
         // Bounce off of the right side of the bounds
@@ -113,13 +127,15 @@ class DemoSquare extends JPanel implements KeyListener {
            	if(horizontalSpeedBounce <= 1) {
         		horizontalSpeedBounce++;
         	}
-        	x = calculateXFalling(0, GRAVITY, time, horizontalSpeedBounce);
+        	x = calculateXFalling(0, time, horizontalSpeedBounce);
         }
-
+        
+        // Draw text
+        drawInfoText(g, x, y);
         g2.fillRect((int) x, (int) y, 50, 50); // Draw the falling object
     }
 
-    public double calculateXFalling(double startX, double gravitationAttraction, double time, double horizontalSpeed) {
+    public double calculateXFalling(double startX, double time, double horizontalSpeed) {
         return startX + time * horizontalSpeed;
     }
 
@@ -136,7 +152,6 @@ class DemoSquare extends JPanel implements KeyListener {
     
     private void drawInfoText(Graphics g, double xPos, double yPos) {
     	Graphics2D g2 = (Graphics2D) g;
-    	
         g2.drawString("Horizontal Speed: " + horizontalSpeedBounce, 0, 10); 
         g2.drawString("X: " + (int) xPos, 0, 20); 
         g2.drawString("Y: " + (int) yPos, 0, 30); 
