@@ -25,6 +25,9 @@ class DemoSquare extends JPanel implements KeyListener {
     
     Color amber = new Color(255, 191, 0);
     
+    double x = calculateXFalling(0, time, horizontalSpeed);
+    double y = calculateYFalling(30, GRAVITY, time);
+    
     public DemoSquare() {
         timer.start(); // Start the timer
         addKeyListener(this); // Add the key listener
@@ -43,7 +46,7 @@ class DemoSquare extends JPanel implements KeyListener {
             resetSimulation();
         }
         // Stops the timer
-        if (e.getKeyChar() == 'q' || e.getKeyChar() == 'Q') {
+        if (e.getKeyChar() == 'p' || e.getKeyChar() == 'P') {
             timer.stop();
         }
         // Resumes the timer
@@ -130,12 +133,11 @@ class DemoSquare extends JPanel implements KeyListener {
         	x = calculateXFalling(0, time, horizontalSpeedBounce);
         }
         
-        // Draw text
-        drawInfoText(g, x, y);
+        //Drawing the square
         g2.fillRect((int) x, (int) y, 50, 50); // Draw the falling object
     }
 
-    public double calculateXFalling(double startX, double time, double horizontalSpeed) {
+	public double calculateXFalling(double startX, double time, double horizontalSpeed) {
         return startX + time * horizontalSpeed;
     }
 
@@ -150,11 +152,16 @@ class DemoSquare extends JPanel implements KeyListener {
         repaint(); // Repaint the panel
     }
     
-    private void drawInfoText(Graphics g, double xPos, double yPos) {
-    	Graphics2D g2 = (Graphics2D) g;
-        g2.drawString("Horizontal Speed: " + horizontalSpeed, 0, 10); 
-        g2.drawString("X: " + (int) xPos, 0, 20); 
-        g2.drawString("Y: " + (int) yPos, 0, 30); 
-    }
+    public double getXPos() {
+		return x;
+	}
+
+	public double getYPos() {
+		return y;
+	}
+	
+	public double getHorizontalSpeed() {
+		return horizontalSpeed;
+	}
 }
 

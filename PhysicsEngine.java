@@ -18,6 +18,10 @@ public class PhysicsEngine {
 		frame.setResizable(false);
 		
 		DemoSquare physDemo = new DemoSquare();
+		DrawInfoText drawText = new DrawInfoText();
+		// The draw text has to be before adding the demo square
+		// Text also has to be the same colors as the physics demo
+		frame.add(drawText);
 		frame.add(physDemo);
 		frame.setVisible(true);
 	}
