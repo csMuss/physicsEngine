@@ -51,12 +51,12 @@ class DemoSquare extends JPanel implements KeyListener {
             timer.start();
         }
         // Makes speed faster by 10
-        if (e.getKeyChar() == 'n' || e.getKeyChar() == 'N') {
-        	horizontalSpeed += 10;
+        if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D') {
+        	horizontalSpeed += 5;
         }
         // Makes speed slower by 10
-        if (e.getKeyChar() == 'm' || e.getKeyChar() == 'M') {
-        	horizontalSpeed -= 10;
+        if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+        	horizontalSpeed -= 5;
         }
     }
 
@@ -152,7 +152,7 @@ class DemoSquare extends JPanel implements KeyListener {
     
     private void drawInfoText(Graphics g, double xPos, double yPos) {
     	Graphics2D g2 = (Graphics2D) g;
-        g2.drawString("Horizontal Speed: " + horizontalSpeedBounce, 0, 10); 
+        g2.drawString("Horizontal Speed: " + horizontalSpeed, 0, 10); 
         g2.drawString("X: " + (int) xPos, 0, 20); 
         g2.drawString("Y: " + (int) yPos, 0, 30); 
     }
