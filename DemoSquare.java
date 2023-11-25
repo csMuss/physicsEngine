@@ -13,7 +13,7 @@ import javax.swing.Timer;
 
 class DemoSquare extends JPanel implements KeyListener {
 	
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     final double GRAVITY = 9.81; // Positive, as the calculation accounts for direction
     
