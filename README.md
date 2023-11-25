@@ -1,7 +1,7 @@
 # physicsEngine
 
 Creates a JFrame with a square that travels from one side of the screen to the other bouncing off of the sides until it hits the bottom and stops.\n
-Press R to restart the simulation. ( \ )
+Press R to restart the simulation. <br>
 Press Q to pause the simulation.\n
 Press E to resume the simulation.\n
 Press A to slow down the speed.\n
