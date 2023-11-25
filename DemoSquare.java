@@ -49,6 +49,9 @@ class DemoSquare extends JPanel implements KeyListener {
         if (e.getKeyChar() == 'p' || e.getKeyChar() == 'P') {
             timer.stop();
         }
+        if (e.getKeyChar() == 'q' || e.getKeyChar() == 'Q') {
+            // Add code to close window
+        }
         // Resumes the timer
         if (e.getKeyChar() == 'e' || e.getKeyChar() == 'e') {
             timer.start();
@@ -82,7 +85,7 @@ class DemoSquare extends JPanel implements KeyListener {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
-        this.setBackground(Color.BLACK);
+        g2.setBackground(Color.black);
         g2.setColor(amber);
         
         // Calculate the new positions
@@ -133,6 +136,8 @@ class DemoSquare extends JPanel implements KeyListener {
         	x = calculateXFalling(0, time, horizontalSpeedBounce);
         }
         
+        DrawInfoText drawText = new DrawInfoText();
+        this.add(drawText);
         //Drawing the square
         g2.fillRect((int) x, (int) y, 50, 50); // Draw the falling object
     }
@@ -151,6 +156,8 @@ class DemoSquare extends JPanel implements KeyListener {
         timer.start(); // Restart the timer
         repaint(); // Repaint the panel
     }
+    
+    // Getters
     
     public double getXPos() {
 		return x;
