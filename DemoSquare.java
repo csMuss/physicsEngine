@@ -80,37 +80,56 @@ class DemoSquare extends JPanel implements KeyListener {
         	time += DELAY / 500.0; // Increment time in half a second, 1000 = 1 second
         	// Lower increment = faster display
             repaint(); // Trigger the repaint to update the position
+            updatePositions();
         }
     });
     
 
     private void updatePositions() {
-        // Update x and y as class fields
+        // Calculate the new positions
         x = calculateXFalling(0, time, horizontalSpeed);
         y = calculateYFalling(30, GRAVITY, time);
-
         // Get the size of the panel
         int panelWidth = getWidth();
         int panelHeight = getHeight();
         // Cube size
         int cubeSize = 50;
-
-        // Check if the cube is beyond the right boundary
+       
+        boolean flipHorizontalLeft = false;
+        boolean flipHorizontalRight = false;
+        // Check if the cube is beyond the right boundary, bounce back
         if (x + cubeSize > panelWidth) {
             x = panelWidth - cubeSize;
-            horizontalSpeedBounce = -horizontalSpeedBounce; // Reverse direction
+            flipHorizontalLeft = true;
         }
         
-        // Check if the cube is beyond the left boundary
-        if (x < 0) {
+        // Check if the cube is beyond the left boundary, bounce back
+        if (x + cubeSize < panelWidth) {
             x = 0;
-            horizontalSpeedBounce = -horizontalSpeedBounce; // Reverse direction
+            flipHorizontalRight = true;
         }
-
         // Check if the cube is beyond the bottom boundary
         if (y + cubeSize > panelHeight) {
             y = panelHeight - cubeSize;     
             timer.stop();
+        }
+        
+        // Bounce off of the left side of the bounds
+        if(flipHorizontalLeft == true) {
+        	if(horizontalSpeedBounce >= 1) {
+        		// number divided by slows down the bounce dividing by double the horizontal speed
+        		// gives you a rebound speed close to the inital horizontal speed
+        		horizontalSpeedBounce = horizontalSpeedBounce - horizontalSpeedBounce / (2 * horizontalSpeedBounce);
+        	}
+        	x = calculateXFalling(0, time, horizontalSpeedBounce);
+        }
+        
+        // Bounce off of the right side of the bounds
+        if(flipHorizontalRight == true) {
+           	if(horizontalSpeedBounce <= 1) {
+        		horizontalSpeedBounce++;
+        	}
+        	x = calculateXFalling(0, time, horizontalSpeedBounce);
         }
     }
 
