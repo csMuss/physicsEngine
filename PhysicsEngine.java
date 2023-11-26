@@ -1,8 +1,14 @@
 package physicsEngine;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import javax.swing.JFrame;
 
 public class PhysicsEngine {
+	
+	private static final int SCREEN_WIDTH = 800;
+	private static final int SCREEN_HEIGHT = 600;
 	
 	public static void main(String args[]) {
 
@@ -14,12 +20,15 @@ public class PhysicsEngine {
 		JFrame frame = new JFrame("Physics Engine");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JFrame.setDefaultLookAndFeelDecorated(true);
-		frame.setSize(800,600);
+		frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		frame.setResizable(false);
-		
+		// Adding a physics object
 		DemoSquare physDemo = new DemoSquare();
+	    //DrawInfoText drawText = new DrawInfoText(physDemo);
 		frame.add(physDemo);
+		
+		frame.setBackground(Color.black);
+		
 		frame.setVisible(true);
 	}
-
 }
