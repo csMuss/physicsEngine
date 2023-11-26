@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-
 public class DrawInfoText {
 
     private DemoSquare demoSquare; // Reference to a DemoSquare instance

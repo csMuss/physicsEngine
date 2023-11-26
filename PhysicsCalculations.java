@@ -2,7 +2,7 @@ package physicsEngine;
 
 public class PhysicsCalculations {
 	
-	public final double GRAVITY = 9.81; // Positive, as the calculation accounts for direction
+	public static final double GRAVITY = 9.81; // Positive, as the calculation accounts for direction
 	
 	public double calculateXFalling(double startX, double time, double horizontalSpeed) {
         return startX + time * horizontalSpeed;

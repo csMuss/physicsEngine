@@ -1,8 +1,5 @@
 package physicsEngine;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-
 import javax.swing.JFrame;
 
 public class PhysicsEngine {
@@ -26,9 +23,6 @@ public class PhysicsEngine {
 		DemoSquare physDemo = new DemoSquare();
 	    //DrawInfoText drawText = new DrawInfoText(physDemo);
 		frame.add(physDemo);
-		
-		frame.setBackground(Color.black);
-		
 		frame.setVisible(true);
 	}
 }
