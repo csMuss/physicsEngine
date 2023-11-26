@@ -15,8 +15,6 @@ import javax.swing.Timer;
 class DemoSquare extends JPanel implements KeyListener {
 	
 	private static final long serialVersionUID = 1L;
-
-    final double GRAVITY = 9.81; // Positive, as the calculation accounts for direction
     
     private static final int DELAY = 8; // 8 ms delay
     private DrawInfoText drawText;
@@ -24,10 +22,12 @@ class DemoSquare extends JPanel implements KeyListener {
     private double horizontalSpeed = 100; // Example horizontal speed
     private double horizontalSpeedBounce = horizontalSpeed;
     
+    private static PhysicsCalculations physCalcs = new PhysicsCalculations();
+    
     Color amber = new Color(255, 191, 0);
     
-    double x = calculateXFalling(0, time, horizontalSpeed);
-    double y = calculateYFalling(30, GRAVITY, time);
+    double x = physCalcs.calculateXFalling(0, time, horizontalSpeed);
+    double y = physCalcs.calculateYFalling(30, physCalcs.GRAVITY, time);
     
     public DemoSquare() {
 	    this.drawText = new DrawInfoText(this);
@@ -44,29 +44,37 @@ class DemoSquare extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // Restarts the simulation
-        if (e.getKeyChar() == 'r' || e.getKeyChar() == 'R') {
-            resetSimulation();
-        }
-        // Stops the timer
-        if (e.getKeyChar() == 'p' || e.getKeyChar() == 'P') {
-            timer.stop();
-        }
-        if (e.getKeyChar() == 'q' || e.getKeyChar() == 'Q') {
-            // Add code to close window
-        }
-        // Resumes the timer
-        if (e.getKeyChar() == 'e' || e.getKeyChar() == 'e') {
-            timer.start();
-        }
-        // Makes speed faster by 10
-        if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D') {
-        	horizontalSpeed += 5;
-        }
-        // Makes speed slower by 10
-        if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-        	horizontalSpeed -= 5;
-        }
+    	char keyChar = Character.toLowerCase(e.getKeyChar());
+
+    	switch (keyChar) {
+    	    // Restart simulation
+    	    case 'r':
+    	        resetSimulation();
+    	        break;
+    	    // Pause simulation
+    	    case 'p':
+    	        timer.stop();
+    	        break;
+    	    // Close window
+    	    case 'q':
+    	        // Add code to close window
+    	        break;
+    	    // Resume simulation
+    	    case 'e':
+    	        timer.start();
+    	        break;
+    	    // Increase speed
+    	    case 'd':
+    	        horizontalSpeed += 5;
+    	        break;
+    	    // Decrease speed
+    	    case 'a':
+    	        horizontalSpeed -= 5;
+    	        break;
+    	    // Do nothing
+    	    default:
+    	        break;
+    	}
     }
 
     @Override
@@ -80,15 +88,26 @@ class DemoSquare extends JPanel implements KeyListener {
         	time += DELAY / 500.0; // Increment time in half a second, 1000 = 1 second
         	// Lower increment = faster display
             repaint(); // Trigger the repaint to update the position
-            updatePositions();
+            updatePositions(); // Trigger updates 
         }
     });
-    
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(amber);
+        // Draw Text
+        this.drawText.draw(g2);
+        // Drawing the square
+        g2.fillRect((int) x, (int) y, 50, 50); // Draw the falling object
+    }
+    
     private void updatePositions() {
         // Calculate the new positions
-        x = calculateXFalling(0, time, horizontalSpeed);
-        y = calculateYFalling(30, GRAVITY, time);
+        x = physCalcs.calculateXFalling(0, time, horizontalSpeed);
+        y = physCalcs.calculateYFalling(30, physCalcs.GRAVITY, time);
         // Get the size of the panel
         int panelWidth = getWidth();
         int panelHeight = getHeight();
@@ -100,13 +119,13 @@ class DemoSquare extends JPanel implements KeyListener {
         // Check if the cube is beyond the right boundary, bounce back
         if (x + cubeSize > panelWidth) {
             x = panelWidth - cubeSize;
-            flipHorizontalLeft = true;
+            flipHorizontalLeft = !flipHorizontalLeft;
         }
         
         // Check if the cube is beyond the left boundary, bounce back
         if (x + cubeSize < panelWidth) {
             x = 0;
-            flipHorizontalRight = true;
+            flipHorizontalRight = !flipHorizontalRight;
         }
         // Check if the cube is beyond the bottom boundary
         if (y + cubeSize > panelHeight) {
@@ -121,41 +140,19 @@ class DemoSquare extends JPanel implements KeyListener {
         		// gives you a rebound speed close to the inital horizontal speed
         		horizontalSpeedBounce = horizontalSpeedBounce - horizontalSpeedBounce / (2 * horizontalSpeedBounce);
         	}
-        	x = calculateXFalling(0, time, horizontalSpeedBounce);
+        	x = physCalcs.calculateXFalling(0, time, horizontalSpeedBounce);
         }
         
         // Bounce off of the right side of the bounds
         if(flipHorizontalRight == true) {
            	if(horizontalSpeedBounce <= 1) {
-        		horizontalSpeedBounce++;
+           		horizontalSpeedBounce = horizontalSpeedBounce + horizontalSpeedBounce / (2 * horizontalSpeedBounce);
         	}
-        	x = calculateXFalling(0, time, horizontalSpeedBounce);
+        	x = physCalcs.calculateXFalling(0, time, horizontalSpeedBounce);
         }
-    }
-
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(amber);
-        // Draw Text
-        this.drawText.draw(g2);
-        // Drawing the square
-        g2.fillRect((int) x, (int) y, 50, 50); // Draw the falling object
-    }
-
-	public double calculateXFalling(double startX, double time, double horizontalSpeed) {
-        return startX + time * horizontalSpeed;
-    }
-
-    public double calculateYFalling(double startY, double gravitationAttraction, double time) {
-        return startY + 0.5 * gravitationAttraction * Math.pow(time, 2);
     }
     
     private void resetSimulation() {
-    	setBackground(Color.BLACK);
         time = 0; // Reset the time
         horizontalSpeedBounce = horizontalSpeed; // Reset horizontal speed
         timer.start(); // Restart the timer
@@ -163,7 +160,6 @@ class DemoSquare extends JPanel implements KeyListener {
     }
     
     // Getters
-    
     public double getXPos() {
 		return x;
 	}
