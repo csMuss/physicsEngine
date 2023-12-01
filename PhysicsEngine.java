@@ -21,7 +21,8 @@ public class PhysicsEngine {
 		frame.setResizable(false);
 		// Adding a physics object
 		DemoSquare physDemo = new DemoSquare();
-	    //DrawInfoText drawText = new DrawInfoText(physDemo);
+	    // DrawInfoText drawText = new DrawInfoText(physDemo);
+		// Need new way of adding to frame, there can only be one.
 		frame.add(physDemo);
 		frame.setVisible(true);
 	}
