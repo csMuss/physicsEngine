@@ -106,6 +106,8 @@ class DemoSquare extends JPanel {
     protected void resetSimulation() {
         time = 0;
         horizontalSpeedBounce = horizontalSpeed;
+        x = physCalcs.calculateXFalling((this.getWidth() / 2) - 50, time, horizontalSpeed);
+        y = physCalcs.calculateYFalling(30, PhysicsCalculations.GRAVITY, time);
         timer.start();
         repaint();
     }
