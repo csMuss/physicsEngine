@@ -16,7 +16,7 @@ class DemoSquare extends JPanel {
     
     private DrawInfoText drawText;
     private double time = 0;
-    protected double horizontalSpeed = 100;
+    protected double horizontalSpeed = 100; //100;
     protected double horizontalSpeedBounce = horizontalSpeed;
     
     private static PhysicsCalculations physCalcs = new PhysicsCalculations();
@@ -37,7 +37,7 @@ class DemoSquare extends JPanel {
         timer.start();
         setFocusable(true);
         // Initialize x and y position
-        x = physCalcs.calculateXFalling(0, time, horizontalSpeed);
+        x = physCalcs.calculateXFalling((this.getWidth() / 2) - 50, time, horizontalSpeed);
         y = physCalcs.calculateYFalling(30, PhysicsCalculations.GRAVITY, time);
         // Listing keyboard
         this.keyBoard = new KeyboardListener(this);
@@ -71,49 +71,36 @@ class DemoSquare extends JPanel {
     }
     
     protected void updatePositions() {
-        boolean flipHorizontalLeft = false;
-        boolean flipHorizontalRight = false;
-        
-        // Calculate the new positions
-        x = physCalcs.calculateXFalling(0, time, horizontalSpeed);
-        y = physCalcs.calculateYFalling(30, PhysicsCalculations.GRAVITY, time);
-        
-        if (isJumping) {
-            y += jumpVelocity * (DELAY / 1000.0);
-            jumpVelocity += PhysicsCalculations.GRAVITY * (DELAY / 1000.0); // Apply gravity to bring the square down
-
-            if (y >= getHeight() - CUBE_SIZE) {
-                y = getHeight() - CUBE_SIZE; // Reset to floor
-                isJumping = false;
-            }
-        }
-
-        x += horizontalSpeedBounce * (DELAY / 1000.0);
+        // Update horizontal position
+        x += horizontalSpeedBounce * (DELAY / 100.0);
 
         // Left boundary check
-        if (x <= 0) {
+        if (x < 0) {
             x = 0; // Reset position to boundary
-            horizontalSpeedBounce = -horizontalSpeedBounce; // Reverse direction
+            horizontalSpeedBounce = Math.abs(horizontalSpeedBounce) * 0.9; // Reverse and reduce speed
         }
 
         // Right boundary check
-        if (x + CUBE_SIZE >= getWidth()) {
+        if (x + CUBE_SIZE > getWidth()) {
             x = getWidth() - CUBE_SIZE; // Reset position to boundary
-            horizontalSpeedBounce = -horizontalSpeedBounce; // Reverse direction
-        }
-
-        // Bounce off of the left side of the bounds
-        if (flipHorizontalLeft) {
             horizontalSpeedBounce = -Math.abs(horizontalSpeedBounce) * 0.9; // Reverse and reduce speed
-            flipHorizontalLeft = false; // Reset flag
         }
 
-        // Bounce off of the right side of the bounds
-        if (flipHorizontalRight) {
-            horizontalSpeedBounce = Math.abs(horizontalSpeedBounce) * 0.9; // Reverse and reduce speed
-            flipHorizontalRight = false; // Reset flag
+        // Update vertical position
+        y += jumpVelocity * (DELAY / 1000.0);
+        jumpVelocity += PhysicsCalculations.GRAVITY * (DELAY / 1000.0); // Apply gravity
+
+        // Top boundary check
+        if (y < 0) {
+            y = 0; // Reset position to boundary
+            jumpVelocity = Math.abs(jumpVelocity) * 0.9; // Reverse and reduce speed
         }
 
+        // Bottom boundary check
+        if (y + CUBE_SIZE > getHeight()) {
+            y = getHeight() - CUBE_SIZE; // Reset position to boundary
+            jumpVelocity = -Math.abs(jumpVelocity) * 0.9; // Reverse and reduce speed
+        }
     }
     
     protected void resetSimulation() {
