@@ -75,22 +75,22 @@ class DemoSquare extends JPanel {
 	// Starters
 	public void initiateJump() {
 		isJumping = true;
-		jumpVelocity = -150;
+		jumpVelocity = -250;
 	}
 
 	public void initiateDrop() {
 		isDropping = true;
-		dropVelocity = 150;
+		dropVelocity = 250;
 	}
 
 	public void initiateLeftMove() {
 		isMovingLeft = true;
-		leftVelocity = -150;
+		leftVelocity = -250;
 	}
 
 	public void initiateRightMove() {
 		isMovingRight = true;
-		rightVelocity = 150;
+		rightVelocity = 250;
 	}
 
 	// Stoppers
@@ -167,6 +167,7 @@ class DemoSquare extends JPanel {
 
 	private void applyDampingToVelocity(String movementType) {
 		double dampingFactor = 0.05; 
+		
 		switch (movementType) {
 		case "jump":
 			jumpVelocity *= dampingFactor;
