@@ -4,9 +4,12 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JPanel;
+import java.awt.image.BufferStrategy;
+
 import javax.swing.Timer;
 
 class DemoSquare extends Canvas {
@@ -42,7 +45,7 @@ class DemoSquare extends Canvas {
 	private double y;
 
 	public DemoSquare() {
-		this.drawText = new DrawInfoText(this);
+		drawText = new DrawInfoText(this);
 		setBackground(Color.BLACK);
 		timer.start();
 		setFocusable(true);
@@ -63,11 +66,42 @@ class DemoSquare extends Canvas {
 		}
 	});
 
-	protected void paintComponent(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(amber);
-		drawText.draw(g2);
-		g2.fillRect((int) x, (int) y, CUBE_SIZE, CUBE_SIZE);
+	@Override
+	public void update(Graphics g) {
+	    paint(g);
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+	    BufferStrategy bufferStrategy = this.getBufferStrategy();
+	    if (bufferStrategy == null) {
+	        this.createBufferStrategy(2); // Create double buffering strategy
+	        return;
+	    }
+
+	    do {
+	        do {
+	            Graphics bufferGraphics = bufferStrategy.getDrawGraphics();
+	            try {
+	                // Clear the canvas
+	                bufferGraphics.setColor(getBackground()); // Use the background color of the canvas
+	                bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
+
+	                // All Drawing here
+	                Graphics2D g2 = (Graphics2D) bufferGraphics;
+	                g2.setColor(amber);
+	                drawText.draw(g2);
+	                g2.fillRect((int) x, (int) y, CUBE_SIZE, CUBE_SIZE);
+	                
+	                
+	            } finally {
+	                bufferGraphics.dispose();
+	            }
+	        } while (bufferStrategy.contentsRestored());
+
+	        bufferStrategy.show();
+	        Toolkit.getDefaultToolkit().sync(); // Ensure display is synchronized
+	    } while (bufferStrategy.contentsLost());
 	}
 
 	// Starters
@@ -210,5 +244,10 @@ class DemoSquare extends Canvas {
 
 	public double getHorizontalSpeed() {
 		return horizontalSpeed;
+	}
+	
+	public void createBufferStrategy() {
+	    // This should be called after the frame is visible
+	    this.createBufferStrategy(2); // 2 indicates double buffering
 	}
 }

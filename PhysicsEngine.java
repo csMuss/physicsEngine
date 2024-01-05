@@ -16,7 +16,6 @@ public class PhysicsEngine {
 	private static void createJFrame() {
 		JFrame frame = new JFrame("Physics Engine");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JFrame.setDefaultLookAndFeelDecorated(true);
 		frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		frame.setResizable(false);
 		// Adding a physics object
