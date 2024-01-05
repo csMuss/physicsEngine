@@ -1,5 +1,6 @@
 package physicsEngine;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,7 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-class DemoSquare extends JPanel {
+class DemoSquare extends Canvas {
 
 	private static final long serialVersionUID = 1L;
 	private static final int DELAY = 8;
@@ -62,13 +63,10 @@ class DemoSquare extends JPanel {
 		}
 	});
 
-	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(amber);
-		this.drawText.draw(g2);
+		drawText.draw(g2);
 		g2.fillRect((int) x, (int) y, CUBE_SIZE, CUBE_SIZE);
 	}
 
