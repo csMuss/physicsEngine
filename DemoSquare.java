@@ -68,40 +68,42 @@ class DemoSquare extends Canvas {
 
 	@Override
 	public void update(Graphics g) {
-	    paint(g);
+		paint(g);
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-	    BufferStrategy bufferStrategy = this.getBufferStrategy();
-	    if (bufferStrategy == null) {
-	        this.createBufferStrategy(2); // Create double buffering strategy
-	        return;
-	    }
+		BufferStrategy bufferStrategy = this.getBufferStrategy();
+		if (bufferStrategy == null) {
+			this.createBufferStrategy(2); // Create double buffering strategy
+			return;
+		}
 
-	    do {
-	        do {
-	            Graphics bufferGraphics = bufferStrategy.getDrawGraphics();
-	            try {
-	                // Clear the canvas
-	                bufferGraphics.setColor(getBackground()); // Use the background color of the canvas
-	                bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
+		do {
+			do {
+				Graphics bufferGraphics = bufferStrategy.getDrawGraphics();
+				try {
+					// Clear the canvas
+					bufferGraphics.setColor(getBackground()); // Use the background color of the canvas
+					bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
 
-	                // All Drawing here
-	                Graphics2D g2 = (Graphics2D) bufferGraphics;
-	                g2.setColor(amber);
-	                drawText.draw(g2);
-	                g2.fillRect((int) x, (int) y, CUBE_SIZE, CUBE_SIZE);
-	                
-	                
-	            } finally {
-	                bufferGraphics.dispose();
-	            }
-	        } while (bufferStrategy.contentsRestored());
+					// All Drawing here
+					Graphics2D g2 = (Graphics2D) bufferGraphics;
+					g2.setColor(amber);
+					drawText.draw(g2);
+					g2.fillRect((int) x, (int) y, CUBE_SIZE, CUBE_SIZE);
 
-	        bufferStrategy.show();
-	        Toolkit.getDefaultToolkit().sync(); // Ensure display is synchronized
-	    } while (bufferStrategy.contentsLost());
+				} finally {
+
+					bufferGraphics.dispose();
+				}
+
+			} while (bufferStrategy.contentsRestored());
+
+			bufferStrategy.show();
+			Toolkit.getDefaultToolkit().sync(); // Ensure display is synchronized
+
+		} while (bufferStrategy.contentsLost());
 	}
 
 	// Starters
@@ -198,8 +200,8 @@ class DemoSquare extends Canvas {
 	}
 
 	private void applyDampingToVelocity(String movementType) {
-		double dampingFactor = 0.05; 
-		
+		double dampingFactor = 0.05;
+
 		switch (movementType) {
 		case "jump":
 			jumpVelocity *= dampingFactor;
@@ -245,9 +247,9 @@ class DemoSquare extends Canvas {
 	public double getHorizontalSpeed() {
 		return horizontalSpeed;
 	}
-	
+
 	public void createBufferStrategy() {
-	    // This should be called after the frame is visible
-	    this.createBufferStrategy(2); // 2 indicates double buffering
+		// This should be called after the frame is visible
+		this.createBufferStrategy(2); // 2 indicates double buffering
 	}
 }
